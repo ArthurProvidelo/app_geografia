@@ -9,9 +9,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ConversorPage(),
+      title: 'Conversor',
+      theme: ThemeData(
+        primaryColor: Colors.blue.shade900,
+        scaffoldBackgroundColor: Colors.grey[100],
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.blue.shade900,
+          foregroundColor: Colors.white,
+          centerTitle: true,
+        ),
+      ),
+      home: const ConversorPage(),
     );
   }
 }
@@ -32,7 +42,7 @@ class _ConversorPageState extends State<ConversorPage> {
     double f = (c * 9 / 5) + 32;
 
     setState(() {
-      resultado = "$c °C = ${f.toStringAsFixed(2)} °F";
+      resultado = "${c.toStringAsFixed(1)} °C = ${f.toStringAsFixed(1)} °F";
     });
   }
 
@@ -41,46 +51,97 @@ class _ConversorPageState extends State<ConversorPage> {
     double c = (f - 32) * 5 / 9;
 
     setState(() {
-      resultado = "$f °F = ${c.toStringAsFixed(2)} °C";
+      resultado = "${f.toStringAsFixed(1)} °F = ${c.toStringAsFixed(1)} °C";
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Conversor de Temperatura 🌡️")),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            TextField(
-              controller: _controller,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: "Digite a temperatura",
-                border: OutlineInputBorder(),
+      appBar: AppBar(title: const Text("Conversor 🌡️")),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              const Icon(Icons.thermostat, size: 80, color: Colors.blue),
+
+              const SizedBox(height: 20),
+
+              const Text(
+                "Converter Temperatura",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
-            ),
-            const SizedBox(height: 20),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: celsiusParaFahrenheit,
-                  child: const Text("C° → F°"),
+              const SizedBox(height: 20),
+
+              TextField(
+                controller: _controller,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: "Digite a temperatura",
+                  prefixIcon: const Icon(Icons.edit),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
                 ),
-                ElevatedButton(
-                  onPressed: fahrenheitParaCelsius,
-                  child: const Text("F° → C°"),
+              ),
+
+              const SizedBox(height: 20),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: celsiusParaFahrenheit,
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                      child: const Text("C° → F°"),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: fahrenheitParaCelsius,
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                      child: const Text("F° → C°"),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 30),
+
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade900,
+                  borderRadius: BorderRadius.circular(20),
                 ),
-              ],
-            ),
-
-            const SizedBox(height: 30),
-
-            Text(resultado, style: const TextStyle(fontSize: 20)),
-          ],
+                child: Text(
+                  resultado.isEmpty ? "Conversão" : resultado,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
